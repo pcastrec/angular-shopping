@@ -12,21 +12,30 @@ import { form, FormField, required } from '@angular/forms/signals';
 export class ProductList implements OnInit {
 
   private productService = inject(ProductService)
+  submitted = signal({ search: '', category: '' })
+
   products = computed(() => {
-    const text = this.form.search().value().toLowerCase()
-    return this.productService.products().filter(p => p.title.toLowerCase().includes(text))
+    const text = this.submitted().search.toLowerCase()
+    return this.productService.products()
+      .filter(p => {
+        const matchText = p.title.toLowerCase().includes(text)
+        let matchCategory = true
+        if (this.submitted().category) {
+          matchCategory = p.category === this.submitted().category
+        }
+        return matchText && matchCategory
+      })
   })
 
-  formValues = signal({ search: '' })
-  form = form(this.formValues, (field) => required(field.search))
+  formValues = signal({ search: '', category: '' })
+  form = form(this.formValues)
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe()
   }
 
   onSubmit(event: Event) {
-    //   event.preventDefault()
-    //   console.log(this.form.search().value())
-    //   this.products = this.productService.filteredProducts(this.form.search().value())
+    event.preventDefault()
+    this.submitted.set(this.form().value())
   }
 }

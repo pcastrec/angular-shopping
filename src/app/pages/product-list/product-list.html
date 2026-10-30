@@ -3,6 +3,13 @@
 <form (submit)="onSubmit($event)">
     <label for="search"></label>
     <input id="search" type="text" [formField]="form.search" />
+    <select id="" [formField]="form.category">
+        <option value="" hidden>Choose a category</option>
+        <option value="">All</option>
+        @for(option of productService.categories(); track option) {
+        <option [value]="option">{{ option }}</option>
+        }
+    </select>
     <button type="submit">🔎</button>
 </form>
 
