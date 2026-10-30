@@ -10,6 +10,12 @@
         <option [value]="option">{{ option }}</option>
         }
     </select>
+    <div>
+        @for(order of ['asc','desc','null']; track order) {
+        <label for="">{{ order }}</label>
+        <input type="radio" [formField]="form.order" [value]="order">
+        }
+    </div>
     <button type="submit">🔎</button>
 </form>
 

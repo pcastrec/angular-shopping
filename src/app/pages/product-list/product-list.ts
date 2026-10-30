@@ -12,11 +12,11 @@ import { form, FormField, required } from '@angular/forms/signals';
 export class ProductList implements OnInit {
 
   private productService = inject(ProductService)
-  submitted = signal({ search: '', category: '' })
+  submitted = signal({ search: '', category: '', order: 'null' })
 
   products = computed(() => {
     const text = this.submitted().search.toLowerCase()
-    return this.productService.products()
+    const result = this.productService.products()
       .filter(p => {
         const matchText = p.title.toLowerCase().includes(text)
         let matchCategory = true
@@ -25,9 +25,17 @@ export class ProductList implements OnInit {
         }
         return matchText && matchCategory
       })
+
+      if(this.submitted().order === 'asc') {
+        return [...result].sort((a, b) => a.price - b.price)
+      }
+      if(this.submitted().order === 'desc') {
+        return [...result].sort((a, b) => b.price - a.price)
+      }
+      return result
   })
 
-  formValues = signal({ search: '', category: '' })
+  formValues = signal({ search: '', category: '', order: 'null' })
   form = form(this.formValues)
 
   ngOnInit(): void {
@@ -38,4 +46,5 @@ export class ProductList implements OnInit {
     event.preventDefault()
     this.submitted.set(this.form().value())
   }
+
 }
