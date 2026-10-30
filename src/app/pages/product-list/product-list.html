@@ -1,0 +1,21 @@
+<h2>Search</h2>
+
+<form (submit)="onSubmit($event)">
+    <label for="search"></label>
+    <input id="search" type="text" [formField]="form.search" />
+    <button type="submit">🔎</button>
+</form>
+
+<h2>Product List</h2>
+
+@if(productService.loading()) {
+<p>Loading ...</p>
+} @else {
+<ul>
+    @for(item of products(); track item.title) {
+    <li>
+        <app-product-item [product]="item" />
+    </li>
+    }
+</ul>
+}

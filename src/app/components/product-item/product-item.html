@@ -1,0 +1,6 @@
+<article>
+    <img width="100" [src]="product().images[0]" [alt]="product().title" />
+    <h3>{{ product().title }}</h3>
+    <p>{{ product().price | currency: 'EUR' : 'symbol' : undefined }}</p>
+    <p>{{ product().category }}</p>
+</article>
